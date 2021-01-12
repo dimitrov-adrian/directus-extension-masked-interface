@@ -1,6 +1,7 @@
 import { terser } from "rollup-plugin-terser";
 import resolve from "rollup-plugin-node-resolve";
 import commonjs from "rollup-plugin-commonjs";
+import rollupJson from "@rollup/plugin-json";
 import vue from "rollup-plugin-vue";
 
 export default {
@@ -9,5 +10,5 @@ export default {
     format: "es",
     file: "dist/index.js",
   },
-  plugins: [terser(), resolve(), commonjs(), vue()],
+  plugins: [terser(), resolve(), commonjs(), rollupJson(), vue()],
 };

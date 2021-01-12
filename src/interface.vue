@@ -1,10 +1,9 @@
 <template>
 	<v-input
-			:value="masker.value"
 			:placeholder="placeholder"
 			:disabled="disabled"
-			:class="className"
-			@input="handleInput"
+			:class="{ [font]: true }"
+			ref="element"
 	>
 		<template v-if="iconLeft" #prepend>
 			<v-icon :name="iconLeft"/>
@@ -16,7 +15,7 @@
 </template>
 
 <script>
-import IMask from 'imask';
+import Inputmask from 'inputmask/bundle';
 
 export default {
 	props: {
@@ -52,69 +51,56 @@ export default {
 			type: String,
 			default: '',
 		},
-		masks: {
-			type: Array,
-			default: () => [],
+		templateType: {
+			type: String,
+			default: 'mask',
+		},
+		template: {
+			type: String,
+			default: '',
 		},
 
-	},
-
-	methods: {
-		handleInput: function(value) {
-			this.masker.resolve(value);
-			let finalValue = this.$props.storeMasked ? this.masker.value : this.masker.unmaskedValue;
-			if (this.$props.transform === 'uppercase') {
-				finalValue = finalValue.toUpperCase();
-			} else {
-				if (this.$props.transform === 'lowercase') {
-					finalValue = finalValue.toLowerCase();
-				}
-			}
-			this.$emit('input', finalValue);
-		},
-		buildMaskConfig: function() {
-			return {
-				mask: this.$props.masks.map((item) => {
-					let pattern = item.mask;
-					if (item.type === 'regex') {
-						try {
-							pattern = new RegExp(item.mask);
-						} catch (error) {
-							return null;
-						}
-					}
-					return {
-						mask: pattern,
-					};
-				}).filter((i) => !!i),
-			};
-		},
 	},
 
 	watch: {
 		value: function(newValue, oldValue) {
-			if (oldValue === null) {
-				this.masker.resolve(newValue);
+			if (newValue !== oldValue) {
+				this.$emit('input', newValue);
+				this.$refs.element.input.inputmask.setValue(newValue);
 			}
 		},
 	},
 
-	computed: {
-		className: function() {
-			return {
-				[this.$props.font]: true,
-				invalid: this.value && !this.masker.isComplete,
-			};
-		},
-	},
+	mounted: function() {
 
-	data: function() {
+		console.log(this)
+		Inputmask({
+			[this.templateType || 'mask']: this.template || '',
+			greedy: true,
+			showMaskOnHover: true,
+			showMaskOnFocus: true,
+			jitMasking: false,
+			casing: this.transform,
+			importDataAttributes: false,
 
-		window.hh = this;
-		window.IMask = IMask;
-		return {
-			masker: IMask.createMask(this.buildMaskConfig()),
-		};
+			oncleared: (event) => {
+				this.$emit('input', '');
+				event.target.classList.remove('invalid');
+			},
+
+			onincomplete: (event) => {
+				event.target.classList.add('invalid');
+			},
+
+			oncomplete: (event) => {
+				const value = this.storeMasked
+						? event.target.value
+						: event.target.inputmask.unmaskedvalue();
+				this.$emit('input', value)
+				event.target.classList.remove('invalid');
+			}
+		})
+			.mask(this.$refs.element.input)
 	},
 
 };
@@ -133,7 +119,8 @@ export default {
 	--v-input-font-family: var(--family-sans-serif);
 }
 
-.invalid >>> .input {
-	border-color: var(--warning) !important;
+>>> .invalid {
+	color: var(--danger);
+	background-color: var(--danger-10);
 }
 </style>
