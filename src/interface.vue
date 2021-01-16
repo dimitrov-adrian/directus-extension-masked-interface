@@ -25,7 +25,6 @@ export default {
 		},
 		disabled: {
 			type: Boolean,
-			default: false,
 		},
 		placeholder: {
 			type: String,
@@ -45,7 +44,6 @@ export default {
 		},
 		storeMasked: {
 			type: Boolean,
-			default: true,
 		},
 		transform: {
 			type: String,
@@ -59,32 +57,33 @@ export default {
 			type: String,
 			default: '',
 		},
-
 	},
 
 	watch: {
 		value: function(newValue, oldValue) {
 			if (newValue !== oldValue) {
 				this.$emit('input', newValue);
-				this.$refs.element.input.inputmask.setValue(newValue);
+				this.$refs.element.input.inputmask.setValue(newValue ? newValue : '');
 			}
 		},
 	},
 
 	mounted: function() {
 
-		console.log(this)
+		const type = this.templateType === 'regex' ? 'regex' : 'mask';
+
 		Inputmask({
-			[this.templateType || 'mask']: this.template || '',
+			[type]: this.template || '',
 			greedy: true,
 			showMaskOnHover: true,
 			showMaskOnFocus: true,
 			jitMasking: false,
 			casing: this.transform,
 			importDataAttributes: false,
+			autoUnmask: !this.storeMasked,
 
 			oncleared: (event) => {
-				this.$emit('input', '');
+				this.$emit('input', null);
 				event.target.classList.remove('invalid');
 			},
 
@@ -93,14 +92,11 @@ export default {
 			},
 
 			oncomplete: (event) => {
-				const value = this.storeMasked
-						? event.target.value
-						: event.target.inputmask.unmaskedvalue();
-				this.$emit('input', value)
+				this.$emit('input', event.target.value)
 				event.target.classList.remove('invalid');
 			}
 		})
-			.mask(this.$refs.element.input)
+			.mask(this.$refs.element.input);
 	},
 
 };
