@@ -1,124 +1,124 @@
-import Interface from './interface.vue';
+import Interface from "./interface.vue";
 
 export default {
-	id: 'extension-masked',
-	name: 'Masked Input',
-	description: 'Masked text input field',
-	icon: 'spellcheck',
+	id: "extension-masked",
+	name: "Masked Input",
+	description: "Masked text input field",
+	icon: "spellcheck",
 	component: Interface,
-	types: ['string'],
+	types: ["string"],
 	options: [
 		{
-			field: 'placeholder',
-			name: 'Placeholder',
+			field: "placeholder",
+			name: "Placeholder",
 			meta: {
-				width: 'half',
-				interface: 'text-input',
-			},
+				width: "half",
+				interface: "text-input"
+			}
 		},
 		{
-			field: 'font',
-			name: 'Font',
-			type: 'string',
+			field: "font",
+			name: "Font",
+			type: "string",
 			meta: {
-				width: 'half',
-				interface: 'dropdown',
+				width: "half",
+				interface: "dropdown",
 				options: {
 					choices: [
-						{text: 'Sans-Serif', value: 'sans-serif'},
-						{text: 'Monospace', value: 'monospace'},
-						{text: 'Serif', value: 'serif'},
-					],
-				},
+						{ text: "Sans-Serif", value: "sans-serif" },
+						{ text: "Monospace", value: "monospace" },
+						{ text: "Serif", value: "serif" }
+					]
+				}
 			},
 			schema: {
-				default_value: 'sans-serif',
-			},
+				default_value: "sans-serif"
+			}
 		},
 		{
-			field: 'iconLeft',
-			name: 'Icon Left',
-			type: 'string',
+			field: "iconLeft",
+			name: "Icon Left",
+			type: "string",
 			meta: {
-				width: 'half',
-				interface: 'icon',
-			},
+				width: "half",
+				interface: "icon"
+			}
 		},
 		{
-			field: 'iconRight',
-			name: 'Icon Right',
-			type: 'string',
+			field: "iconRight",
+			name: "Icon Right",
+			type: "string",
 			meta: {
-				width: 'half',
-				interface: 'icon',
-			},
+				width: "half",
+				interface: "icon"
+			}
 		},
 		{
-			field: 'storeMasked',
-			name: 'Store Masked',
-			type: 'boolean',
+			field: "storeMasked",
+			name: "Store Masked",
+			type: "boolean",
 			meta: {
-				width: 'half',
-				interface: 'toggle',
+				width: "half",
+				interface: "toggle"
 			},
 			schema: {
-				default_value: false,
-			},
+				default_value: false
+			}
 		},
 		{
-			field: 'transform',
-			name: 'Transform',
-			type: 'string',
+			field: "transform",
+			name: "Transform",
+			type: "string",
 			meta: {
-				width: 'half',
-				interface: 'dropdown',
+				width: "half",
+				interface: "dropdown",
 				options: {
 					choices: [
-						{text: 'No', value: ''},
-						{text: 'UPPERCASE', value: 'upper'},
-						{text: 'lowercase', value: 'lower'},
-						{text: 'Title', value: 'title'},
-					],
-				},
+						{ text: "No", value: "" },
+						{ text: "UPPERCASE", value: "upper" },
+						{ text: "lowercase", value: "lower" },
+						{ text: "Title", value: "title" }
+					]
+				}
 			},
 			schema: {
-				default_value: '',
-			},
+				default_value: ""
+			}
 		},
 		{
-			field: 'templateType',
-			name: 'Type',
-			type: 'string',
+			field: "templateType",
+			name: "Type",
+			type: "string",
 			meta: {
-				width: 'half',
-				interface: 'dropdown',
+				width: "half",
+				interface: "dropdown",
 				options: {
 					choices: [
-						{text: 'Static', value: 'mask'},
-						{text: 'RegEx', value: 'regex'},
-					],
-				},
+						{ text: "Static", value: "mask" },
+						{ text: "RegEx", value: "regex" }
+					]
+				}
 			},
 			schema: {
-				default_value: 'mask',
-			},
+				default_value: "mask"
+			}
 		},
 		{
-			field: 'template',
-			name: 'Mask Template',
-			type: 'string',
+			field: "template",
+			name: "Mask Template",
+			type: "string",
 			meta: {
-				interface: 'text-input',
-				width: 'half',
-			},
+				interface: "text-input",
+				width: "half"
+			}
 		},
 		{
-			field: 'help',
-			name: 'Help',
-			type: 'alias',
+			field: "help",
+			name: "Help",
+			type: "alias",
 			meta: {
-				width: 'full',
-				interface: 'notice',
+				width: "full",
+				interface: "notice",
 				options: {
 					text: `
 					9 - numeric
@@ -145,9 +145,9 @@ export default {
 
 					More info at: https://github.com/RobinHerbots/Inputmask
 						`,
-					icon: 'help',
-				},
-			},
-		},
-	],
+					icon: "help"
+				}
+			}
+		}
+	]
 };
