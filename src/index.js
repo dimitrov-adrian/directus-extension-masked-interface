@@ -1,7 +1,7 @@
 import Interface from "./interface.vue";
 
 export default {
-	id: "extension-masked",
+	id: "extension-masked-input",
 	name: "Masked Input",
 	description: "Masked text input field",
 	icon: "spellcheck",
@@ -22,7 +22,7 @@ export default {
 			type: "string",
 			meta: {
 				width: "half",
-				interface: "dropdown",
+				interface: "select-dropdown",
 				options: {
 					choices: [
 						{ text: "Sans-Serif", value: "sans-serif" },
@@ -41,7 +41,7 @@ export default {
 			type: "string",
 			meta: {
 				width: "half",
-				interface: "icon"
+				interface: "select-icon"
 			}
 		},
 		{
@@ -50,7 +50,7 @@ export default {
 			type: "string",
 			meta: {
 				width: "half",
-				interface: "icon"
+				interface: "select-icon"
 			}
 		},
 		{
@@ -71,7 +71,7 @@ export default {
 			type: "string",
 			meta: {
 				width: "half",
-				interface: "dropdown",
+				interface: "select-dropdown",
 				options: {
 					choices: [
 						{ text: "No", value: "" },
@@ -91,7 +91,7 @@ export default {
 			type: "string",
 			meta: {
 				width: "half",
-				interface: "dropdown",
+				interface: "select-dropdown",
 				options: {
 					choices: [
 						{ text: "Static", value: "mask" },
@@ -118,7 +118,7 @@ export default {
 			type: "alias",
 			meta: {
 				width: "full",
-				interface: "notice",
+				interface: "presentation-notice",
 				options: {
 					text: `
 					9 - numeric
