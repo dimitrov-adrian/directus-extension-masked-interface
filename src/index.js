@@ -10,60 +10,66 @@ export default {
 	options: [
 		{
 			field: "placeholder",
-			name: "Placeholder",
+			name: "$t:placeholder",
 			meta: {
 				width: "half",
-				interface: "text-input"
-			}
+				interface: "text-input",
+				options: {
+					placeholder: "$t:enter_a_placeholder",
+				},
+			},
 		},
 		{
 			field: "font",
-			name: "Font",
+			name: "$t:font",
 			type: "string",
 			meta: {
 				width: "half",
 				interface: "select-dropdown",
 				options: {
 					choices: [
-						{ text: "Sans-Serif", value: "sans-serif" },
-						{ text: "Monospace", value: "monospace" },
-						{ text: "Serif", value: "serif" }
-					]
-				}
+						{ text: "$t:sans_serif", value: "sans-serif" },
+						{ text: "$t:monospace", value: "monospace" },
+						{ text: "$t:serif", value: "serif" },
+					],
+				},
 			},
 			schema: {
-				default_value: "sans-serif"
-			}
+				default_value: "sans-serif",
+			},
 		},
 		{
 			field: "iconLeft",
-			name: "Icon Left",
+			name: "$t:icon_left",
 			type: "string",
 			meta: {
 				width: "half",
-				interface: "select-icon"
-			}
+				interface: "select-icon",
+			},
 		},
 		{
 			field: "iconRight",
-			name: "Icon Right",
+			name: "$t:icon_right",
 			type: "string",
 			meta: {
 				width: "half",
-				interface: "select-icon"
-			}
+				interface: "select-icon",
+			},
 		},
 		{
 			field: "storeMasked",
-			name: "Store Masked",
+			name: "$t:save",
 			type: "boolean",
 			meta: {
 				width: "half",
-				interface: "toggle"
+				interface: "toggle",
+				options: {
+					label: "$t:interfaces.input-hash.masked",
+				},
 			},
 			schema: {
-				default_value: false
-			}
+				default_value: false,
+			},
 		},
 		{
 			field: "transform",
@@ -74,47 +80,47 @@ export default {
 				interface: "select-dropdown",
 				options: {
 					choices: [
-						{ text: "No", value: "" },
-						{ text: "UPPERCASE", value: "upper" },
-						{ text: "lowercase", value: "lower" },
-						{ text: "Title", value: "title" }
-					]
-				}
+						{ text: "$t:not_allowed", value: "" },
+						{ text: "$t:interfaces.tags.uppercase", value: "upper" },
+						{ text: "$t:interfaces.tags.lowercase", value: "lower" },
+						{ text: "$t:interfaces.tags.auto_formatter", value: "title" },
+					],
+				},
 			},
 			schema: {
-				default_value: ""
-			}
+				default_value: "",
+			},
 		},
 		{
 			field: "templateType",
-			name: "Type",
+			name: "$t:type",
 			type: "string",
 			meta: {
 				width: "half",
 				interface: "select-dropdown",
 				options: {
 					choices: [
-						{ text: "Static", value: "mask" },
-						{ text: "RegEx", value: "regex" }
-					]
-				}
+						{ text: "Simple", value: "mask" },
+						{ text: "RegEx", value: "regex" },
+					],
+				},
 			},
 			schema: {
-				default_value: "mask"
-			}
+				default_value: "mask",
+			},
 		},
 		{
 			field: "template",
-			name: "Mask Template",
+			name: "$t:template",
 			type: "string",
 			meta: {
 				interface: "text-input",
-				width: "half"
-			}
+				width: "half",
+			},
 		},
 		{
-			field: "help",
-			name: "Help",
+			field: "description",
+			name: "$t:description",
 			type: "alias",
 			meta: {
 				width: "full",
@@ -125,29 +131,33 @@ export default {
 					a - alphabetical
 					* - alphanumeric
 					\\ - escaping char
-
-					Repeats:
-					{n} => n repeats
-					masking {n,m} => from n to m
-
-					Also {+} and {*} is allowed. + start from 1 and * start from 0.
-					other chars which is not in custom definitions supposed to be fixed
-
-					Alternator:
-					The alternator syntax is like an OR statement.
-					The mask can be one of the 3 choices specified in the alternator.
-
-					To define an alternator use the |.
-					ex:
-						"a|9" => a or 9
-						"(aaa)|(999)" => aaa or 999
-						"(aaa|999|9AA)" => aaa or 999 or 9AA
-
-					More info at: https://github.com/RobinHerbots/Inputmask
-						`,
-					icon: "help"
-				}
-			}
-		}
-	]
+					| - alternator
+					() - grouping
+					{n,[m]} - repeats`,
+					icon: "help",
+				},
+			},
+		},
+		{
+			field: "infobuttons",
+			name: "$t:documentation",
+			type: "alias",
+			meta: {
+				width: "full",
+				interface: "presentation-links",
+				options: {
+					links: [
+						{
+							label: "Static",
+							url: "https://github.com/RobinHerbots/Inputmask",
+						},
+						{
+							label: "RegExp",
+							url: "https://regexr.com/",
+						},
+					],
+				},
+			},
+		},
+	],
 };

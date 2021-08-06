@@ -1,14 +1,28 @@
-import { terser } from "rollup-plugin-terser";
-import resolve from "rollup-plugin-node-resolve";
-import commonjs from "rollup-plugin-commonjs";
+// Need custom rollup until, get official support for rollup JSON
+// in @directus/extension-sdk
+
 import rollupJson from "@rollup/plugin-json";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
+import { terser } from "rollup-plugin-terser";
+import styles from "rollup-plugin-styles";
 import vue from "rollup-plugin-vue";
+import { APP_SHARED_DEPS } from "@directus/shared/constants";
+import packageJson from "./package.json";
 
 export default {
-	input: "src/index.js",
+	input: packageJson["directus:extension"].source,
 	output: {
 		format: "es",
-		file: "dist/extensions/interfaces/masked-input/index.js"
+		file: packageJson["directus:extension"].path,
 	},
-	plugins: [terser(), resolve(), commonjs(), rollupJson(), vue()]
+	external: APP_SHARED_DEPS,
+	plugins: [
+		vue({ preprocessStyles: true }),
+		styles(),
+		nodeResolve(),
+		commonjs({ esmExternals: true, sourceMap: false }),
+		//terser(),
+		rollupJson(),
+	],
 };

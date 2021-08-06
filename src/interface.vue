@@ -3,7 +3,7 @@
 		:placeholder="placeholder"
 		:disabled="disabled"
 		:class="{ [font]: true }"
-		ref="element"
+		ref="inputElement"
 	>
 		<template v-if="iconLeft" #prepend>
 			<v-icon :name="iconLeft" />
@@ -15,88 +15,99 @@
 </template>
 
 <script>
+import { defineComponent, ref, onMounted, watch } from "vue";
 import Inputmask from "inputmask/bundle";
 
-export default {
+export default defineComponent({
+	emits: ["input"],
 	props: {
 		value: {
 			type: String,
-			default: null
+			default: null,
 		},
 		disabled: {
-			type: Boolean
+			type: Boolean,
 		},
 		placeholder: {
 			type: String,
-			default: null
+			default: null,
 		},
 		iconLeft: {
 			type: String,
-			default: null
+			default: null,
 		},
 		iconRight: {
 			type: String,
-			default: null
+			default: null,
 		},
 		font: {
 			type: String,
-			default: "sans-serif"
+			default: "sans-serif",
 		},
 		storeMasked: {
-			type: Boolean
+			type: Boolean,
+			default: false,
 		},
 		transform: {
 			type: String,
-			default: ""
+			default: "",
 		},
 		templateType: {
 			type: String,
-			default: "mask"
+			default: "mask",
 		},
 		template: {
 			type: String,
-			default: ""
-		}
+			default: "",
+		},
 	},
+	setup(props, { emit }) {
+		const inputElement = ref(null);
 
-	watch: {
-		value: function(newValue, oldValue) {
-			if (newValue !== oldValue) {
-				this.$emit("input", newValue);
-				this.$refs.element.input.inputmask.setValue(newValue ? newValue : "");
+		onMounted(() => {
+			const type = props.templateType === "regex" ? "regex" : "mask";
+
+			Inputmask({
+				[type]: props.template || "",
+				greedy: true,
+				showMaskOnHover: true,
+				showMaskOnFocus: true,
+				jitMasking: false,
+				casing: props.transform,
+				importDataAttributes: false,
+				autoUnmask: !props.storeMasked,
+				clearIncomplete: false,
+
+				oncleared: (event) => {
+					emit("input", null);
+					event.target.classList.remove("invalid");
+				},
+
+				onincomplete: (event) => {
+					event.target.classList.add("invalid");
+				},
+
+				oncomplete: (event) => {
+					emit("input", event.target.value);
+					event.target.classList.remove("invalid");
+				},
+			}).mask(inputElement.value.input);
+		});
+
+		watch(
+			() => props.value,
+			(newValue, oldValue) => {
+				if (newValue === oldValue) return;
+				inputElement.value.input.inputmask.setValue(newValue || "");
 			}
-		}
+		);
+
+		return {
+			inputElement,
+			font: props.font,
+		};
 	},
-
-	mounted: function() {
-		const type = this.templateType === "regex" ? "regex" : "mask";
-
-		Inputmask({
-			[type]: this.template || "",
-			greedy: true,
-			showMaskOnHover: true,
-			showMaskOnFocus: true,
-			jitMasking: false,
-			casing: this.transform,
-			importDataAttributes: false,
-			autoUnmask: !this.storeMasked,
-
-			oncleared: event => {
-				this.$emit("input", null);
-				event.target.classList.remove("invalid");
-			},
-
-			onincomplete: event => {
-				event.target.classList.add("invalid");
-			},
-
-			oncomplete: event => {
-				this.$emit("input", event.target.value);
-				event.target.classList.remove("invalid");
-			}
-		}).mask(this.$refs.element.input);
-	}
-};
+});
 </script>
 
 <style lang="css" scoped>
@@ -112,7 +123,7 @@ export default {
 	--v-input-font-family: var(--family-sans-serif);
 }
 
->>> .invalid {
+::v-deep(.invalid) {
 	color: var(--danger);
 	background-color: var(--danger-10);
 }

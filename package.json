@@ -1,23 +1,34 @@
 {
 	"name": "directus-extension-masked-interface",
-	"version": "1.0.0-beta",
+	"version": "v1.0.0-rc.88",
 	"author": {
 		"email": "dimitrov.adrian@gmail.com",
 		"name": "Adrian Dimitrov"
 	},
-	"main": "dist/index.js",
+	"license": "gpl-3.0",
+	"keywords": [
+		"directus",
+		"directus-extension",
+		"directus-custom-interface",
+		"masked-interface",
+		"masked-input"
+	],
+	"directus:extension": {
+		"type": "interface",
+		"path": "dist/index.js",
+		"source": "src/index.js",
+		"host": "^v9.0.0-rc.88",
+		"hidden": false
+	},
 	"scripts": {
+		"dist": "npm run build && mv dist masked-interface && zip -r masked-interface.zip masked-interface",
+		"prepack": "npm run build",
 		"build": "rollup -c",
 		"dev": "rollup -c -w"
 	},
 	"devDependencies": {
-		"@rollup/plugin-json": "^4.1.0",
-		"rollup": "^2.51.1",
-		"rollup-plugin-commonjs": "^10.1.0",
-		"rollup-plugin-node-resolve": "^5.2.0",
-		"rollup-plugin-terser": "^7.0.2",
-		"rollup-plugin-vue": "~5.1.9",
-		"vue-template-compiler": "^2.6.14"
+		"@directus/extension-sdk": "^9.0.0-rc.85",
+		"@rollup/plugin-json": "^4.1.0"
 	},
 	"dependencies": {
 		"inputmask": "^5.0.6"
