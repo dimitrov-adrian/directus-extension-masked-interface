@@ -2,6 +2,7 @@
 	<v-input
 		:placeholder="placeholder"
 		:disabled="disabled"
+		:model-value="value"
 		:class="{ [font]: true }"
 		ref="inputElement"
 	>
