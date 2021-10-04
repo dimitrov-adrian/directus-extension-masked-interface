@@ -1,9 +1,13 @@
 {
 	"name": "directus-extension-masked-interface",
-	"version": "v1.0.0-rc.88",
+	"version": "v1.0.0-rc.95",
 	"author": {
-		"email": "dimitrov.adrian@gmail.com",
+		"email": "dimitrov.adrian+gh@gmail.com",
 		"name": "Adrian Dimitrov"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/dimitrov-adrian/directus-extension-masked-interface.git"
 	},
 	"license": "gpl-3.0",
 	"keywords": [
@@ -17,18 +21,15 @@
 		"type": "interface",
 		"path": "dist/index.js",
 		"source": "src/index.js",
-		"host": "^v9.0.0-rc.88",
+		"host": "^v9.0.0-rc.95",
 		"hidden": false
 	},
 	"scripts": {
-		"dist": "npm run build && mv dist masked-interface && zip -r masked-interface.zip masked-interface",
 		"prepack": "npm run build",
-		"build": "rollup -c",
-		"dev": "rollup -c -w"
+		"build": "npx directus-extension build"
 	},
 	"devDependencies": {
-		"@directus/extension-sdk": "^9.0.0-rc.85",
-		"@rollup/plugin-json": "^4.1.0"
+		"@directus/extensions-sdk": "^9.0.0-rc.95"
 	},
 	"dependencies": {
 		"inputmask": "^5.0.6"

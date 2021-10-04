@@ -6,30 +6,13 @@ Input text string by template
 
 ## Installation
 
-### Directus as npm package
-
-If using Directus as npm package, you can include the extension as package in your `package.json` file as:
-
-```json
-"dependencies": {
-	"directus-extension-masked-interface": "https://github.com/dimitrov-adrian/directus-extension-masked-interface/releases/latest/download/masked-interface.zip"
-}
-```
-
-### Docker installation / extensions directory
-
-If you want to use in docker container or into the extension directory, you need to add it
-manualy from the package tar
+In your Directus installation root
 
 ```bash
-cd <your directus extensions directory>/interfaces
-curl -LO https://github.com/dimitrov-adrian/directus-extension-editorjs-interface/releases/latest/download/editorjs.zip
-unzip editorjs.zip
+npm install dimitrov-adrian/directus-extension-masked-interface
 ```
 
-### Build by yourself
-
-You can also clone this repository and build it by yourself.
+Restart directus
 
 ## How to use it
 

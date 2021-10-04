@@ -1,70 +1,70 @@
-import Interface from "./interface.vue";
+import Interface from './interface.vue';
 
 export default {
-	id: "extension-masked-input",
-	name: "Masked Input",
-	description: "Masked text input field",
-	icon: "spellcheck",
+	id: 'extension-masked-input',
+	name: 'Masked Input',
+	description: 'Masked text input field',
+	icon: 'spellcheck',
 	component: Interface,
-	types: ["string"],
+	types: ['string'],
 	options: [
 		{
-			field: "placeholder",
-			name: "$t:placeholder",
+			field: 'placeholder',
+			name: '$t:placeholder',
 			meta: {
-				width: "half",
-				interface: "text-input",
+				width: 'half',
+				interface: 'text-input',
 				options: {
-					placeholder: "$t:enter_a_placeholder",
+					placeholder: '$t:enter_a_placeholder',
 				},
 			},
 		},
 		{
-			field: "font",
-			name: "$t:font",
-			type: "string",
+			field: 'font',
+			name: '$t:font',
+			type: 'string',
 			meta: {
-				width: "half",
-				interface: "select-dropdown",
+				width: 'half',
+				interface: 'select-dropdown',
 				options: {
 					choices: [
-						{ text: "$t:sans_serif", value: "sans-serif" },
-						{ text: "$t:monospace", value: "monospace" },
-						{ text: "$t:serif", value: "serif" },
+						{ text: '$t:sans_serif', value: 'sans-serif' },
+						{ text: '$t:monospace', value: 'monospace' },
+						{ text: '$t:serif', value: 'serif' },
 					],
 				},
 			},
 			schema: {
-				default_value: "sans-serif",
+				default_value: 'sans-serif',
 			},
 		},
 		{
-			field: "iconLeft",
-			name: "$t:icon_left",
-			type: "string",
+			field: 'iconLeft',
+			name: '$t:icon_left',
+			type: 'string',
 			meta: {
-				width: "half",
-				interface: "select-icon",
+				width: 'half',
+				interface: 'select-icon',
 			},
 		},
 		{
-			field: "iconRight",
-			name: "$t:icon_right",
-			type: "string",
+			field: 'iconRight',
+			name: '$t:icon_right',
+			type: 'string',
 			meta: {
-				width: "half",
-				interface: "select-icon",
+				width: 'half',
+				interface: 'select-icon',
 			},
 		},
 		{
-			field: "storeMasked",
-			name: "$t:save",
-			type: "boolean",
+			field: 'storeMasked',
+			name: '$t:save',
+			type: 'boolean',
 			meta: {
-				width: "half",
-				interface: "toggle",
+				width: 'half',
+				interface: 'toggle',
 				options: {
-					label: "$t:interfaces.input-hash.masked",
+					label: '$t:interfaces.input-hash.masked',
 				},
 			},
 			schema: {
@@ -72,59 +72,59 @@ export default {
 			},
 		},
 		{
-			field: "transform",
-			name: "Transform",
-			type: "string",
+			field: 'transform',
+			name: 'Transform',
+			type: 'string',
 			meta: {
-				width: "half",
-				interface: "select-dropdown",
+				width: 'half',
+				interface: 'select-dropdown',
 				options: {
 					choices: [
-						{ text: "$t:not_allowed", value: "" },
-						{ text: "$t:interfaces.tags.uppercase", value: "upper" },
-						{ text: "$t:interfaces.tags.lowercase", value: "lower" },
-						{ text: "$t:interfaces.tags.auto_formatter", value: "title" },
+						{ text: '$t:not_allowed', value: '' },
+						{ text: '$t:interfaces.tags.uppercase', value: 'upper' },
+						{ text: '$t:interfaces.tags.lowercase', value: 'lower' },
+						{ text: '$t:interfaces.tags.auto_formatter', value: 'title' },
 					],
 				},
 			},
 			schema: {
-				default_value: "",
+				default_value: '',
 			},
 		},
 		{
-			field: "templateType",
-			name: "$t:type",
-			type: "string",
+			field: 'templateType',
+			name: '$t:type',
+			type: 'string',
 			meta: {
-				width: "half",
-				interface: "select-dropdown",
+				width: 'half',
+				interface: 'select-dropdown',
 				options: {
 					choices: [
-						{ text: "Simple", value: "mask" },
-						{ text: "RegEx", value: "regex" },
+						{ text: 'Simple', value: 'mask' },
+						{ text: 'RegEx', value: 'regex' },
 					],
 				},
 			},
 			schema: {
-				default_value: "mask",
+				default_value: 'mask',
 			},
 		},
 		{
-			field: "template",
-			name: "$t:template",
-			type: "string",
+			field: 'template',
+			name: '$t:template',
+			type: 'string',
 			meta: {
-				interface: "text-input",
-				width: "half",
+				interface: 'text-input',
+				width: 'half',
 			},
 		},
 		{
-			field: "description",
-			name: "$t:description",
-			type: "alias",
+			field: 'description',
+			name: '$t:description',
+			type: 'alias',
 			meta: {
-				width: "full",
-				interface: "presentation-notice",
+				width: 'full',
+				interface: 'presentation-notice',
 				options: {
 					text: `
 					9 - numeric
@@ -134,26 +134,26 @@ export default {
 					| - alternator
 					() - grouping
 					{n,[m]} - repeats`,
-					icon: "help",
+					icon: 'help',
 				},
 			},
 		},
 		{
-			field: "infobuttons",
-			name: "$t:documentation",
-			type: "alias",
+			field: 'infobuttons',
+			name: '$t:documentation',
+			type: 'alias',
 			meta: {
-				width: "full",
-				interface: "presentation-links",
+				width: 'full',
+				interface: 'presentation-links',
 				options: {
 					links: [
 						{
-							label: "Static",
-							url: "https://github.com/RobinHerbots/Inputmask",
+							label: 'Static',
+							url: 'https://github.com/RobinHerbots/Inputmask',
 						},
 						{
-							label: "RegExp",
-							url: "https://regexr.com/",
+							label: 'RegExp',
+							url: 'https://regexr.com/',
 						},
 					],
 				},

@@ -16,11 +16,11 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, watch } from "vue";
-import Inputmask from "inputmask/bundle";
+import { defineComponent, ref, onMounted, watch } from 'vue';
+import Inputmask from 'inputmask/bundle';
 
 export default defineComponent({
-	emits: ["input"],
+	emits: ['input'],
 	props: {
 		value: {
 			type: String,
@@ -43,7 +43,7 @@ export default defineComponent({
 		},
 		font: {
 			type: String,
-			default: "sans-serif",
+			default: 'sans-serif',
 		},
 		storeMasked: {
 			type: Boolean,
@@ -51,25 +51,25 @@ export default defineComponent({
 		},
 		transform: {
 			type: String,
-			default: "",
+			default: '',
 		},
 		templateType: {
 			type: String,
-			default: "mask",
+			default: 'mask',
 		},
 		template: {
 			type: String,
-			default: "",
+			default: '',
 		},
 	},
 	setup(props, { emit }) {
 		const inputElement = ref(null);
 
 		onMounted(() => {
-			const type = props.templateType === "regex" ? "regex" : "mask";
+			const type = props.templateType === 'regex' ? 'regex' : 'mask';
 
 			Inputmask({
-				[type]: props.template || "",
+				[type]: props.template || '',
 				greedy: true,
 				showMaskOnHover: true,
 				showMaskOnFocus: true,
@@ -80,17 +80,17 @@ export default defineComponent({
 				clearIncomplete: false,
 
 				oncleared: (event) => {
-					emit("input", null);
-					event.target.classList.remove("invalid");
+					emit('input', null);
+					event.target.classList.remove('invalid');
 				},
 
 				onincomplete: (event) => {
-					event.target.classList.add("invalid");
+					event.target.classList.add('invalid');
 				},
 
 				oncomplete: (event) => {
-					emit("input", event.target.value);
-					event.target.classList.remove("invalid");
+					emit('input', event.target.value);
+					event.target.classList.remove('invalid');
 				},
 			}).mask(inputElement.value.input);
 		});
@@ -99,7 +99,7 @@ export default defineComponent({
 			() => props.value,
 			(newValue, oldValue) => {
 				if (newValue === oldValue) return;
-				inputElement.value.input.inputmask.setValue(newValue || "");
+				inputElement.value.input.inputmask.setValue(newValue || '');
 			}
 		);
 
