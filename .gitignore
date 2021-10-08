@@ -1,5 +1,3 @@
 node_modules
 /dist
 /*.tgz
-/*.zip
-/masked-interface

@@ -1,7 +1,0 @@
-{
-	"htmlWhitespaceSensitivity": "ignore",
-	"printWidth": 120,
-	"proseWrap": "always",
-	"singleQuote": true,
-	"useTabs": true
-}
