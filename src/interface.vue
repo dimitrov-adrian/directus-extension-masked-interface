@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, onUnmounted, watch, PropType } from 'vue';
+import { defineComponent, ref, onMounted, onUnmounted, PropType } from 'vue';
 import Inputmask from 'inputmask';
 
 export default defineComponent({
@@ -53,7 +53,7 @@ export default defineComponent({
 			default: '',
 		},
 		templateType: {
-			type: String,
+			type: String as PropType<'url' | 'email' | 'ip' | 'mac' | 'vin' | 'ssn' | 'mask' | 'regex'>,
 			default: 'mask',
 		},
 		template: {
@@ -73,7 +73,6 @@ export default defineComponent({
 
 			if (['regex', 'mask'].includes(props.templateType)) {
 				customArgs[props.templateType] = props.template || '';
-				customArgs.greedy = true;
 			}
 
 			inputMaskInstance.value = Inputmask(aliasType, {
@@ -83,7 +82,7 @@ export default defineComponent({
 				jitMasking: false,
 				casing: props.transform as Inputmask.Casing,
 				importDataAttributes: false,
-				autoUnmask: !props.storeMasked,
+				autoUnmask: true,
 				clearIncomplete: false,
 				tabThrough: true,
 				nullable: true,
@@ -98,26 +97,21 @@ export default defineComponent({
 
 				oncomplete: () => {
 					inputElement.value.input.classList.remove('invalid');
-					emit('input', inputMaskInstance.value.unmaskedvalue());
+
+					if (props.storeMasked) {
+						emit('input', inputMaskInstance.value.format(inputMaskInstance.value.unmaskedvalue()));
+					} else {
+						emit('input', inputMaskInstance.value.unmaskedvalue());
+					}
 				},
 			}).mask(inputElement.value.input);
-
-			inputMaskInstance.value.setValue(props.value || '');
 		});
 
 		onUnmounted(() => {
 			if (!inputMaskInstance.value) return;
+
 			inputMaskInstance.value.remove();
 		});
-
-		watch(
-			() => props.value,
-			(newValue, oldValue) => {
-				if (newValue === oldValue) return;
-				if (!inputMaskInstance.value) return;
-				inputMaskInstance.value.setValue(newValue || '');
-			}
-		);
 
 		return {
 			inputElement,
