@@ -4,7 +4,7 @@
 		:model-value="value"
 		:placeholder="placeholder"
 		:disabled="disabled"
-		:class="{ font: font, isInvalid }"
+		:class="{ [font]: font }"
 	>
 		<template v-if="iconLeft" #prepend>
 			<v-icon :name="iconLeft" />
@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, watch, PropType } from 'vue';
+import { defineComponent, ref, onMounted, onUnmounted, watch, PropType } from 'vue';
 import Inputmask from 'inputmask';
 
 export default defineComponent({
@@ -65,18 +65,19 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const inputElement = ref<{ input: HTMLInputElement } | null>(null);
 		const inputMaskInstance = ref<Inputmask.Instance | null>(null);
-		const isInvalid = ref<boolean>(false);
 
 		onMounted(() => {
 			const aliasType = ['regex', 'mask'].includes(props.templateType) ? null : props.templateType;
-			const customArgs = {};
+
+			const customArgs: Inputmask.Options = {};
+
 			if (['regex', 'mask'].includes(props.templateType)) {
 				customArgs[props.templateType] = props.template || '';
+				customArgs.greedy = true;
 			}
 
 			inputMaskInstance.value = Inputmask(aliasType, {
 				...customArgs,
-				greedy: true,
 				showMaskOnHover: true,
 				showMaskOnFocus: true,
 				jitMasking: false,
@@ -86,24 +87,27 @@ export default defineComponent({
 				clearIncomplete: false,
 				tabThrough: true,
 				nullable: true,
-				autoUnmask: true,
-
-				oncleared: () => {
-					emit('input', null);
-					isInvalid.value = false;
-				},
 
 				onincomplete: () => {
-					isInvalid.value = true;
+					inputElement.value.input.classList.add('invalid');
+				},
+
+				onKeyValidation: () => {
+					inputElement.value.input.classList.toggle('invalid', !inputMaskInstance.value.isValid());
 				},
 
 				oncomplete: () => {
+					inputElement.value.input.classList.remove('invalid');
 					emit('input', inputMaskInstance.value.unmaskedvalue());
-					isInvalid.value = false;
 				},
 			}).mask(inputElement.value.input);
 
-			isInvalid.value = !inputMaskInstance.value.isValid();
+			inputMaskInstance.value.setValue(props.value || '');
+		});
+
+		onUnmounted(() => {
+			if (!inputMaskInstance.value) return;
+			inputMaskInstance.value.remove();
 		});
 
 		watch(
@@ -111,14 +115,12 @@ export default defineComponent({
 			(newValue, oldValue) => {
 				if (newValue === oldValue) return;
 				if (!inputMaskInstance.value) return;
-
 				inputMaskInstance.value.setValue(newValue || '');
 			}
 		);
 
 		return {
 			inputElement,
-			isInvalid,
 		};
 	},
 });
@@ -137,8 +139,7 @@ export default defineComponent({
 	--v-input-font-family: var(--family-sans-serif);
 }
 
-.isInvalid:deep(.input) {
+:deep(input.invalid) {
 	color: var(--danger);
-	background-color: var(--danger-10);
 }
 </style>

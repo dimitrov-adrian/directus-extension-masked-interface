@@ -159,6 +159,7 @@ export default {
 					* - Alphanumeric
 					\\ - Escaping Char
 					| - Alternator
+					[] - Optional
 					() - Grouping
 					{n,[m]} - Repeater
 					`,
