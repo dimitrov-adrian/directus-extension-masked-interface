@@ -1,10 +1,10 @@
 <template>
 	<v-input
+		ref="inputElement"
+		:model-value="value"
 		:placeholder="placeholder"
 		:disabled="disabled"
-		:model-value="value"
-		:class="font"
-		ref="inputElement"
+		:class="{ font: font, isInvalid }"
 	>
 		<template v-if="iconLeft" #prepend>
 			<v-icon :name="iconLeft" />
@@ -16,11 +16,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, watch } from "vue";
-import Inputmask from "inputmask/bundle";
+import { defineComponent, ref, onMounted, watch, PropType } from 'vue';
+import Inputmask from 'inputmask';
 
 export default defineComponent({
-	emits: ["input"],
 	props: {
 		value: {
 			type: String,
@@ -42,70 +41,84 @@ export default defineComponent({
 			default: null,
 		},
 		font: {
-			type: String as PropType<"sans-serif" | "serif" | "monospace">,
-			default: "sans-serif",
+			type: String as PropType<'sans-serif' | 'serif' | 'monospace'>,
+			default: 'sans-serif',
 		},
 		storeMasked: {
 			type: Boolean,
 			default: false,
 		},
 		transform: {
-			type: String,
-			default: "",
+			type: String as PropType<'' | 'lower' | 'upper' | 'title'>,
+			default: '',
 		},
 		templateType: {
 			type: String,
-			default: "mask",
+			default: 'mask',
 		},
 		template: {
 			type: String,
-			default: "",
+			default: '',
 		},
 	},
+	emits: ['input'],
 	setup(props, { emit }) {
-		const inputElement = ref<{ input: HTMLInputElement }>(null);
+		const inputElement = ref<{ input: HTMLInputElement } | null>(null);
+		const inputMaskInstance = ref<Inputmask.Instance | null>(null);
+		const isInvalid = ref<boolean>(false);
 
 		onMounted(() => {
-			const type = props.templateType === "regex" ? "regex" : "mask";
+			const aliasType = ['regex', 'mask'].includes(props.templateType) ? null : props.templateType;
+			const customArgs = {};
+			if (['regex', 'mask'].includes(props.templateType)) {
+				customArgs[props.templateType] = props.template || '';
+			}
 
-			Inputmask({
-				[type]: props.template || "",
+			inputMaskInstance.value = Inputmask(aliasType, {
+				...customArgs,
 				greedy: true,
 				showMaskOnHover: true,
 				showMaskOnFocus: true,
 				jitMasking: false,
-				casing: props.transform,
+				casing: props.transform as Inputmask.Casing,
 				importDataAttributes: false,
 				autoUnmask: !props.storeMasked,
 				clearIncomplete: false,
+				tabThrough: true,
+				nullable: true,
+				autoUnmask: true,
 
-				oncleared: (event) => {
-					emit("input", null);
-					event.target.classList.remove("invalid");
+				oncleared: () => {
+					emit('input', null);
+					isInvalid.value = false;
 				},
 
-				onincomplete: (event) => {
-					event.target.classList.add("invalid");
+				onincomplete: () => {
+					isInvalid.value = true;
 				},
 
-				oncomplete: (event) => {
-					emit("input", event.target.value);
-					event.target.classList.remove("invalid");
+				oncomplete: () => {
+					emit('input', inputMaskInstance.value.unmaskedvalue());
+					isInvalid.value = false;
 				},
 			}).mask(inputElement.value.input);
+
+			isInvalid.value = !inputMaskInstance.value.isValid();
 		});
 
 		watch(
 			() => props.value,
 			(newValue, oldValue) => {
 				if (newValue === oldValue) return;
-				inputElement.value.input.inputmask.setValue(newValue || "");
+				if (!inputMaskInstance.value) return;
+
+				inputMaskInstance.value.setValue(newValue || '');
 			}
 		);
 
 		return {
 			inputElement,
-			font: props.font,
+			isInvalid,
 		};
 	},
 });
@@ -124,7 +137,7 @@ export default defineComponent({
 	--v-input-font-family: var(--family-sans-serif);
 }
 
-:deep(.invalid) {
+.isInvalid:deep(.input) {
 	color: var(--danger);
 	background-color: var(--danger-10);
 }
