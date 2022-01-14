@@ -1,6 +1,6 @@
-> ### This extension is in development and most probably will have file structure change when Directus 9 official releases. Meanwhile breaking changes are possible in anytime.
+# Directus extension - Masked Interface
 
-# Directus Masked Input Interface
+![](https://raw.githubusercontent.com/dimitrov-adrian/directus-extension-masked-interface/main/screenshot.gif)
 
 Input text string by template
 
@@ -9,23 +9,30 @@ Input text string by template
 In your Directus installation root
 
 ```bash
-npm install dimitrov-adrian/directus-extension-masked-interface
+npm install directus-extension-masked-interface
 ```
 
 Restart directus
 
-## How to use it
+## How to use
 
-# Masked text input
+The interface extension uses `string` and `numeric` types.
 
-Handler
+1. Create new standard field with `string` type
+2. For interface select **Input Mask** and pick a masking type.
 
-\+ ( **_ ) _** **\_ \_**
+Available masking types:
 
-**\_** @ **\_** . \_\_
+- Template - simplified templating pattern
+- RegEx - uses regular expression for defining the pattern
+- Presets
+  - URL
+  - Email
+  - IP Address (IPv4 templating pattern)
+  - MAC Address (MAC address template using `:` as separators)
+  - VIN
+  - SIN
 
-Or for example vehicles plate number like
+## How it is works
 
-P4096 HB
-
-aa 9999 aa
+The extension utilizes [InputMask by @RobinHerbots](https://github.com/RobinHerbots/Inputmask) for masking library.
