@@ -17,7 +17,7 @@
     "type": "interface",
     "path": "dist/index.js",
     "source": "src/index.ts",
-    "host": "^v9.5.0",
+    "host": "^v9.9.0",
     "hidden": false
   },
   "scripts": {
@@ -28,7 +28,7 @@
     "dist"
   ],
   "devDependencies": {
-    "@directus/extensions-sdk": "^9.9.0",
+    "@directus/extensions-sdk": "^9.10.0",
     "directus-codestyle": "dimitrov-adrian/directus-codestyle",
     "inputmask": "^5.0.7",
     "typescript": "^4.6.4",
