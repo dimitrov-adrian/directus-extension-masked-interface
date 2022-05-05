@@ -1,7 +1,7 @@
-import { InterfaceConfig } from '@directus/shared/types';
+import { defineInterface } from '@directus/extensions-sdk';
 import InterfaceComponent from './interface.vue';
 
-export default {
+export default defineInterface({
 	id: 'extension-masked-input',
 	name: 'Masked Input',
 	description: 'Masked text input field',
@@ -176,4 +176,4 @@ export default {
 			},
 		},
 	],
-} as InterfaceConfig;
+});
