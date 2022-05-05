@@ -6,7 +6,7 @@
 					<v-icon :name="iconLeft" />
 				</span>
 			</template>
-			<input ref="input" :disabled="disabled" :placeholder="placeholder" @input="onInput" />
+			<input ref="input" :disabled="disabled" :placeholder="placeholder" @input="propagateInput" @blur="onBlur" />
 			<template v-if="iconRight">
 				<span class="suffix">
 					<v-icon :name="iconRight" />
@@ -82,7 +82,6 @@ export default defineComponent({
 
 		onMounted(() => {
 			if (!input.value) return;
-
 			inputMaskInstance.value = Inputmask(aliasType, {
 				...customArgs,
 				showMaskOnHover: true,
@@ -98,37 +97,42 @@ export default defineComponent({
 				// Build-in event hooks (onincomplete, oncomplete, onclear) are not sufficient do good emit.
 			}).mask(input.value);
 
-			inputMaskInstance.value.setValue(props.value || '');
-			invalid.value = !isValid();
+			setValue(props.value);
 		});
-
-		watch(
-			() => props.value,
-			(newValue) => {
-				inputMaskInstance.value.setValue(newValue || '');
-				invalid.value = !isValid();
-			}
-		);
 
 		onUnmounted(() => {
 			if (!inputMaskInstance.value) return;
 			inputMaskInstance.value.remove();
 		});
 
+		watch(
+			() => props.value,
+			(newValue) => {
+				inputMaskInstance.value.setValue(newValue || '');
+				invalid.value = newValue && !inputMaskInstance.value.isValid(newValue);
+			}
+		);
+
 		return {
 			input,
-			onInput,
+			propagateInput,
+			onBlur,
 			invalid,
 		};
+
+		function setValue(value: string | null) {
+			inputMaskInstance.value.setValue(value || '');
+			invalid.value = inputMaskInstance.value.hasMaskedValue() && !inputMaskInstance.value.isComplete();
+		}
+
+		function onBlur() {
+			if (inputMaskInstance.value.isComplete()) return;
+			setValue(props.value);
+		}
 
 		function onClear() {
 			invalid.value = false;
 			emitValue(null);
-		}
-
-		function onComplete() {
-			invalid.value = false;
-			emitValue(getValue());
 		}
 
 		function onIncomplete() {
@@ -136,7 +140,12 @@ export default defineComponent({
 			emitValue(props.value);
 		}
 
-		function onInput() {
+		function onComplete() {
+			invalid.value = false;
+			emitValue(getValue());
+		}
+
+		function propagateInput() {
 			if (inputMaskInstance.value.isComplete()) {
 				onComplete();
 			} else {
@@ -144,17 +153,11 @@ export default defineComponent({
 			}
 		}
 
-		function isValid() {
-			if (props.required && !getValue()) return false;
-
-			return inputMaskInstance.value.isComplete();
-		}
-
 		function emitValue(value: string | null) {
 			if (props.disabled) return;
 			if (value === props.value) return;
 
-			if (value && inputMaskInstance.value.isValid(value)) {
+			if (value) {
 				emit('input', value);
 			} else {
 				emit('input', null);
@@ -163,9 +166,10 @@ export default defineComponent({
 
 		function getValue() {
 			const unmaskedvalue = inputMaskInstance.value.unmaskedvalue();
-			if (!unmaskedvalue) return null;
 
+			if (!unmaskedvalue) return null;
 			if (props.storeMasked) return inputMaskInstance.value.format(unmaskedvalue);
+
 			return unmaskedvalue;
 		}
 	},
